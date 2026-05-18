@@ -1,4 +1,4 @@
-# Firefox-appimage
+# PaleMoon-appimage
 Unofficial AppImage built on top of the official portable builds.
 
 The AppImages are created by extracting the official archives, with the only addition of a .desktop file, an icon and an AppRun (three essential elements for an AppImage).
