@@ -416,7 +416,7 @@ _create_appimage() {
 	chmod a+x ./"$APP-$TOOLKIT".AppDir/AppRun
 
 	# Export the AppDir to an AppImage
-	ARCH=x86_64 appimagetool appimagetool -u "gh-releases-zsync|$GITHUB_REPOSITORY_OWNER|PaleMoon-appimage|latest|*-$TOOLKIT-*x86_64.AppImage.zsync" \
+	ARCH=x86_64 appimagetool -u "gh-releases-zsync|$GITHUB_REPOSITORY_OWNER|PaleMoon-appimage|latest|*-$TOOLKIT-*x86_64.AppImage.zsync" \
 		./"$APP-$TOOLKIT".AppDir PaleMoon-"$TOOLKIT"-"$VERSION"-x86_64.AppImage || exit 1
 }
 
