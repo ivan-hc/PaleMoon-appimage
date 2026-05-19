@@ -18,8 +18,8 @@ jobs:
       if: always()
       run: |
         sudo apt update && sudo apt install desktop-file-utils
-        chmod a+x ./palemoon-builder.sh
-        ./palemoon-builder.sh
+        chmod a+x ./*builder.sh
+        ./*builder.sh
         mkdir dist
         mv *AppImage* dist/
 
