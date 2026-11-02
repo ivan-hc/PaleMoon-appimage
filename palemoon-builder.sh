@@ -9,7 +9,7 @@ cd ./tmp || exit 1
 # DOWNLOAD APPIMAGETOOL
 if ! command -v appimagetool 1>/dev/null; then
 	if [ ! -f ./appimagetool ]; then
-		echo " Downloading appimagetool..." && curl -#Lo appimagetool https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage && chmod a+x ./appimagetool || exit 1
+		echo " Downloading appimagetool..." && wget -q https://github.com/pkgforge-dev/appimagetool/releases/latest/download/appimagetool-x86_64-linux -O appimagetool && chmod a+x ./appimagetool || exit 1
 	fi
 	export PATH="$PWD":"${PATH}"
 fi
@@ -401,6 +401,8 @@ _create_appimage() {
 
 	# Add the icon
 	cp ./browser/chrome/icons/default/default48.png "$APP".png
+	# Ensure .DirIcon is present (mandatory for pkgforge-dev appimagetool)
+	cp ./"$APP".png ./.DirIcon
 	cd .. || exit 1
 
 	# Check the version
@@ -416,8 +418,13 @@ _create_appimage() {
 	chmod a+x ./"$APP-$TOOLKIT".AppDir/AppRun
 
 	# Export the AppDir to an AppImage
-	ARCH=x86_64 appimagetool -u "gh-releases-zsync|$GITHUB_REPOSITORY_OWNER|PaleMoon-appimage|latest|*-$TOOLKIT-*x86_64.AppImage.zsync" \
-		./"$APP-$TOOLKIT".AppDir PaleMoon-"$TOOLKIT"-"$VERSION"-x86_64.AppImage || exit 1
+	# Ensure .DirIcon is present in AppDir root
+	cp ./"$APP-$TOOLKIT".AppDir/"$APP".png ./"$APP-$TOOLKIT".AppDir/.DirIcon
+
+	VERSION="$VERSION" APPIMAGE_ARCH=x86_64 appimagetool \
+		-u "gh-releases-zsync|$GITHUB_REPOSITORY_OWNER|PaleMoon-appimage|latest|*-$TOOLKIT-*x86_64.AppImage.zsync" \
+		-n PaleMoon-"$TOOLKIT"-"$VERSION"-x86_64.AppImage \
+		./"$APP-$TOOLKIT".AppDir || exit 1
 }
 
 toolkits="gtk2 gtk3"
